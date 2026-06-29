@@ -1,0 +1,33 @@
+README.md
+  s_4ccf8ec3ddcbc8::t_fb7ba304a91129 1-43
+package.json
+  s_4ccf8ec3ddcbc8::t_7c8dcbbab787bb 1-14
+.github/workflows/apply.yml
+  s_4ccf8ec3ddcbc8::t_99d71f7978a8d3 1-60
+.github/workflows/ci.yml
+  s_4ccf8ec3ddcbc8::t_d2ccfc15391111 1-20
+.gitignore
+  s_4ccf8ec3ddcbc8::t_b70e64eb684649 1-3
+apply.mjs
+  s_4ccf8ec3ddcbc8::t_1d771c9308b754 1-111
+apply.test.mjs
+  s_4ccf8ec3ddcbc8::t_abf32712d9138a 1-89
+state/bounded.tools.dns.json
+  s_4ccf8ec3ddcbc8::t_b7e9c3fc95085c 1-51
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.3",
+  "base_commit_sha": "11ce6f20ee868ceea659fab72c1d97e3088c0631",
+  "prompts": {},
+  "sessions": {
+    "s_4ccf8ec3ddcbc8": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "684a1b39-b25c-4f45-ac97-97af68184b7a",
+        "model": "claude-opus-4-8"
+      },
+      "human_author": "Robert DeLanghe <1240090+bdelanghe@users.noreply.github.com>"
+    }
+  }
+}
