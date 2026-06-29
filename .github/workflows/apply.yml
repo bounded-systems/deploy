@@ -1,0 +1,60 @@
+name: apply
+
+# Reconcile live Cloudflare DNS toward the desired state in state/*.dns.json.
+#
+# SAFE BY DEFAULT: a plain dispatch is a DRY-RUN (prints the plan, mutates nothing). A real apply
+# (apply=true) runs only through the `cloudflare-apply` Environment — set REQUIRED REVIEWERS on it
+# (free on this PUBLIC repo) so every apply needs manual approval. Deletes additionally need
+# allow_delete=true.
+#
+# No stored Cloudflare secret: the write-scoped token is minted just-in-time by the OIDC
+# token-broker. On a real apply the broker grants DNS-EDIT only because the OIDC `environment`
+# claim is present (i.e. the run passed the cloudflare-apply approval); a dry-run gets read-only.
+on:
+  workflow_dispatch:
+    inputs:
+      apply:
+        description: "Execute changes (creates + updates). Unchecked = dry-run."
+        type: boolean
+        default: false
+      allow_delete:
+        description: "Also apply DELETES (requires apply=true)."
+        type: boolean
+        default: false
+
+permissions:
+  contents: read
+  id-token: write # OIDC → token-broker
+
+jobs:
+  apply:
+    runs-on: ubuntu-latest
+    # Approval gate only kicks in for a real apply; dry-runs need no environment. The OIDC token
+    # minted inside an apply run therefore carries environment=cloudflare-apply, which the broker
+    # requires before it will mint a DNS-edit token.
+    environment: ${{ inputs.apply && 'cloudflare-apply' || '' }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - name: Mint a scoped Cloudflare token via the OIDC broker
+        env:
+          CF_BROKER_URL: ${{ vars.CF_BROKER_URL }}
+          AUDIENCE: ${{ vars.GH_AUDIENCE || 'cf-oidc-token-broker' }}
+        run: |
+          set -euo pipefail
+          [ -n "${CF_BROKER_URL:-}" ] || { echo "::error::set the CF_BROKER_URL repo variable (the broker endpoint)"; exit 1; }
+          oidc=$(curl -sf "${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=${AUDIENCE}" \
+            -H "Authorization: Bearer ${ACTIONS_ID_TOKEN_REQUEST_TOKEN}" | jq -r .value)
+          [ -n "$oidc" ] && [ "$oidc" != "null" ] || { echo "::error::failed to get OIDC token"; exit 1; }
+          tok=$(curl -sf -X POST "${CF_BROKER_URL}" -H "Authorization: Bearer ${oidc}" | jq -r .token)
+          [ -n "$tok" ] && [ "$tok" != "null" ] || { echo "::error::broker returned no token"; exit 1; }
+          echo "::add-mask::$tok"
+          echo "CLOUDFLARE_API_TOKEN=$tok" >> "$GITHUB_ENV"
+      - name: Plan / apply DNS
+        env:
+          CLOUDFLARE_ACCOUNT_ID: ${{ vars.CLOUDFLARE_ACCOUNT_ID }}
+          APPLY: ${{ inputs.apply }}
+          ALLOW_DELETE: ${{ inputs.allow_delete }}
+        run: node apply.mjs

@@ -1,0 +1,14 @@
+{
+  "name": "deploy",
+  "version": "0.1.0",
+  "description": "bounded.tools DNS-as-code — reviewer-gated, OIDC-brokered Cloudflare apply.",
+  "type": "module",
+  "private": true,
+  "scripts": {
+    "test": "node --test apply.test.mjs",
+    "plan": "node apply.mjs"
+  },
+  "engines": {
+    "node": ">=22"
+  }
+}

@@ -1,0 +1,20 @@
+name: ci
+
+# Unit tests for the value-aware DNS diff (planChanges). No network, no secrets.
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: node --test apply.test.mjs

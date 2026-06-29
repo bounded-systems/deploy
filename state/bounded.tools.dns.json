@@ -1,0 +1,51 @@
+[
+  {
+    "type": "AAAA",
+    "name": "bounded.tools",
+    "content": "100::",
+    "proxied": true,
+    "ttl": 1
+  },
+  {
+    "type": "MX",
+    "name": "bounded.tools",
+    "content": "mx02.mail.icloud.com",
+    "proxied": false,
+    "ttl": 3600
+  },
+  {
+    "type": "MX",
+    "name": "bounded.tools",
+    "content": "mx01.mail.icloud.com",
+    "proxied": false,
+    "ttl": 3600
+  },
+  {
+    "type": "TXT",
+    "name": "bounded.tools",
+    "content": "\"v=spf1 include:icloud.com ~all\"",
+    "proxied": false,
+    "ttl": 3600
+  },
+  {
+    "type": "TXT",
+    "name": "bounded.tools",
+    "content": "\"apple-domain=CHBShlIrVf9FtlAa\"",
+    "proxied": false,
+    "ttl": 3600
+  },
+  {
+    "type": "CNAME",
+    "name": "sig1._domainkey.bounded.tools",
+    "content": "sig1.dkim.bounded.tools.at.icloudmailadmin.com",
+    "proxied": false,
+    "ttl": 3600
+  },
+  {
+    "type": "AAAA",
+    "name": "trust.bounded.tools",
+    "content": "100::",
+    "proxied": true,
+    "ttl": 1
+  }
+]
