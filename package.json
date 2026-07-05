@@ -5,7 +5,7 @@
   "type": "module",
   "private": true,
   "scripts": {
-    "test": "node --test apply.test.mjs",
+    "test": "node --test",
     "plan": "node apply.mjs"
   },
   "engines": {
