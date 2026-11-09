@@ -56,4 +56,4 @@ jobs:
       contents: read
       id-token: write
     # SHA-pinned, per org policy — never a branch. The broker door pins this SHA too.
-    uses: bounded-systems/.github/.github/workflows/_auto-merge.yml@2cd9ebc0a2543b3ba11dc7673b351a9d1f6c9445
+    uses: bounded-systems/.github/.github/workflows/_auto-merge.yml@1716efd3a3cc81ba97e0ff2be0f9a0a0ebd6574c
